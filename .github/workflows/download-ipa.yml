@@ -34,6 +34,7 @@ jobs:
       with:
         python-version: "3.x"
     - name: Install dependencies
+      working-directory: ipaoutput
       run: |
         python3 -m pip install --upgrade pip
         sudo apt-get install python3-setuptools
@@ -47,3 +48,12 @@ jobs:
           APP_NAME: ${{ inputs.app_name }}
           APPLE_EMAIL: ${{ inputs.apple_email }}
           APPLE_PASSWORD: ${{ inputs.apple_password }}
+          
+      # Runs a single command using the runners shell
+    - name: Archive IPA download
+      uses: actions/upload-artifact@v3
+      with:
+          name: dist-without-markdown
+          path: |
+            ipaoutput
+            !ipaoutput/**/*.md
