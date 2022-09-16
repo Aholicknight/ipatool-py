@@ -47,7 +47,7 @@ jobs:
         pip install requests
         pip install rich
         if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
-    - name: Scan target site with CloudFail
+    - name: Download IPA
       run: |
         python3 main.py lookup -b "${{ env.APP_NAME }}" -c "${{ env.APP_COUNTRY }}" download --purchase -e "${{ env.APPLE_EMAIL }}" -p "${{ env.APPLE_PASSWORD }}" -o ipaoutput
         
@@ -61,7 +61,7 @@ jobs:
     - name: Archive IPA download
       uses: actions/upload-artifact@v3
       with:
-          name: dist-without-markdown
+          name: Archive IPA download
           path: |
             ipaoutput
             !ipaoutput/**/*.md
