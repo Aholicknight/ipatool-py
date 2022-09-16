@@ -8,6 +8,11 @@ on:
         default: "com.touchingapp.potatsolite"
         required: true
         type: string
+      app_country:
+        description: "App store country"
+        default: "US"
+        required: true
+        type: string
       apple_email:
         description: "Apple ID Email"
         default: "example@gmail.com"
@@ -44,10 +49,11 @@ jobs:
         if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
     - name: Scan target site with CloudFail
       run: |
-        python3 main.py lookup -b "${{ env.APP_NAME }}" -c JP download -e "${{ env.APPLE_EMAIL }}" -p "${{ env.APPLE_PASSWORD }}" -o ipa
+        python3 main.py lookup -b "${{ env.APP_NAME }}" -c "${{ env.APP_COUNTRY }}" download -e "${{ env.APPLE_EMAIL }}" -p "${{ env.APPLE_PASSWORD }}" -o ipaoutput
         
       env:
           APP_NAME: ${{ inputs.app_name }}
+          APP_COUNTRY: ${{ inputs.app_country}}
           APPLE_EMAIL: ${{ inputs.apple_email }}
           APPLE_PASSWORD: ${{ inputs.apple_password }}
           
