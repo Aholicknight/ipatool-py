@@ -1,0 +1,49 @@
+name: Download IPA
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_name:
+        description: "App name"
+        default: "com.touchingapp.potatsolite"
+        required: true
+        type: string
+      apple_email:
+        description: "Apple ID Email"
+        default: "example@gmail.com"
+        required: true
+        type: string
+      apple_password:
+        description: "Apple ID Password"
+        default: "password"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.x"
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        sudo apt-get install python3-setuptools
+        pip install flake8
+        if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
+    - name: Scan target site with CloudFail
+      run: |
+        python3 main.py lookup -b "${{ env.APP_NAME }}" -c JP download -e "${{ env.APPLE_EMAIL }}" -p "${{ env.APPLE_PASSWORD }}" -o ipa
+        
+      env:
+          APP_NAME: ${{ inputs.app_name }}
+          APPLE_EMAIL: ${{ inputs.apple_email }}
+          APPLE_PASSWORD: ${{ inputs.apple_password }}
